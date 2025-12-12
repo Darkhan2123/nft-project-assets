@@ -3,50 +3,129 @@
 <head>
     <title>Certificate Gallery</title>
     <style>
-        body { font-family: sans-serif; text-align: center; padding: 20px; }
-        .gallery { display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; }
-        .card { border: 1px solid #ddd; padding: 10px; border-radius: 8px; width: 250px; }
-        img { width: 100%; border-radius: 5px; }
-        input { padding: 10px; margin: 20px; width: 300px; }
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            text-align: center; 
+            padding: 40px; 
+            background-color: #f9f9f9;
+        }
+        h1 { color: #333; margin-bottom: 10px; }
+        p.subtitle { color: #666; margin-bottom: 40px; }
+        
+        /* Search Bar Style */
+        #searchInput { 
+            padding: 12px 20px; 
+            margin-bottom: 40px; 
+            width: 100%; 
+            max-width: 400px;
+            border: 1px solid #ccc;
+            border-radius: 25px;
+            font-size: 16px;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+        #searchInput:focus {
+            border-color: #007bff;
+            box-shadow: 0 0 8px rgba(0,123,255,0.2);
+        }
+
+        /* Gallery Grid */
+        .gallery { 
+            display: flex; 
+            flex-wrap: wrap; 
+            justify-content: center; 
+            gap: 30px; 
+        }
+
+        /* Card Style */
+        .card { 
+            background: white;
+            border: 1px solid #eee; 
+            padding: 20px; 
+            border-radius: 12px; 
+            width: 280px; 
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            transition: transform 0.2s;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px rgba(0,0,0,0.1);
+        }
+        img { 
+            width: 100%; 
+            height: 200px; 
+            object-fit: cover; 
+            border-radius: 8px; 
+            margin-bottom: 15px;
+            background-color: #eee; /* Placeholder color while loading */
+        }
+        h3 { margin: 10px 0; color: #222; }
+        .info { color: #555; font-size: 14px; line-height: 1.6; }
+        .grade-badge {
+            display: inline-block;
+            background-color: #e3f2fd;
+            color: #0d47a1;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-weight: bold;
+            font-size: 12px;
+        }
     </style>
 </head>
 <body>
     <h1>Graduate Certificates Gallery</h1>
-
-    <input type="text" id="searchInput" placeholder="Search by name or program..." onkeyup="filterGallery()">
+    <p class="subtitle">Search and verify student certifications</p>
+    
+    <input type="text" id="searchInput" placeholder="Search by name..." onkeyup="filterGallery()">
 
     <div id="gallery" class="gallery">
         </div>
 
     <script>
-        // DATA: Paste your Metadata Links here manually for the demo
+        // DATA: I have updated this list with YOUR specific data
         const certificates = [
-            {
-                image: "https://gateway.pinata.cloud/ipfs/YOUR_IMAGE_CID/0.png",
-                name: "Alice",
-                program: "Computer Science",
-                grade: "A"
+            { 
+                // Darkhan
+                // Note: I used the CID directly. Emojis in filenames often break links, 
+                // so using the raw CID is safer.
+                image: "https://ipfs.io/ipfs/bafkreigq7leoexn44g2xvjo77purink3ai6el6b7ppaac4u44s4yhe5nty", 
+                name: "Darkhan", 
+                program: "Blockchain Development", 
+                grade: "A" 
             },
-            {
-                image: "https://gateway.pinata.cloud/ipfs/YOUR_IMAGE_CID/1.png",
-                name: "Bob",
-                program: "Mathematics",
-                grade: "B"
+            { 
+                // Student Two
+                image: "https://ipfs.io/ipfs/bafkreic66jhftgkgdldqhtdmlvehlt7hs2hxucjqwx2lww7dxbovaynhiy", 
+                name: "Student Two", 
+                program: "Blockchain Development", 
+                grade: "B" 
             },
-            // ... Add all your students here
+            { 
+                // Student Three
+                image: "https://ipfs.io/ipfs/bafkreid5cijzn4uwmqteewiawon6ejukplaauluooasc6jb7i35weqii3y", 
+                name: "Student Three", 
+                program: "Blockchain Development", 
+                grade: "B" 
+            }
         ];
 
         const galleryDiv = document.getElementById('gallery');
 
         function displayCertificates(data) {
             galleryDiv.innerHTML = "";
+            if (data.length === 0) {
+                galleryDiv.innerHTML = "<p>No certificates found.</p>";
+                return;
+            }
             data.forEach(cert => {
                 const card = `
                     <div class="card">
-                        <img src="${cert.image}" alt="Certificate">
+                        <img src="${cert.image}" alt="Certificate for ${cert.name}" onerror="this.onerror=null;this.src='https://via.placeholder.com/280x200?text=Image+Not+Found';">
                         <h3>${cert.name}</h3>
-                        <p><strong>Program:</strong> ${cert.program}</p>
-                        <p><strong>Grade:</strong> ${cert.grade}</p>
+                        <div class="info">
+                            <p><strong>Program:</strong><br>${cert.program}</p>
+                            <p><strong>Grade:</strong> <span class="grade-badge">${cert.grade}</span></p>
+                        </div>
                     </div>
                 `;
                 galleryDiv.innerHTML += card;
@@ -55,8 +134,8 @@
 
         function filterGallery() {
             const query = document.getElementById('searchInput').value.toLowerCase();
-            const filtered = certificates.filter(cert =>
-                cert.name.toLowerCase().includes(query) ||
+            const filtered = certificates.filter(cert => 
+                cert.name.toLowerCase().includes(query) || 
                 cert.program.toLowerCase().includes(query)
             );
             displayCertificates(filtered);
