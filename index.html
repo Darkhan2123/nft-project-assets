@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Certificate Gallery</title>
+    <style>
+        body { font-family: sans-serif; text-align: center; padding: 20px; }
+        .gallery { display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; }
+        .card { border: 1px solid #ddd; padding: 10px; border-radius: 8px; width: 250px; }
+        img { width: 100%; border-radius: 5px; }
+        input { padding: 10px; margin: 20px; width: 300px; }
+    </style>
+</head>
+<body>
+    <h1>Graduate Certificates Gallery</h1>
+
+    <input type="text" id="searchInput" placeholder="Search by name or program..." onkeyup="filterGallery()">
+
+    <div id="gallery" class="gallery">
+        </div>
+
+    <script>
+        // DATA: Paste your Metadata Links here manually for the demo
+        const certificates = [
+            {
+                image: "https://gateway.pinata.cloud/ipfs/YOUR_IMAGE_CID/0.png",
+                name: "Alice",
+                program: "Computer Science",
+                grade: "A"
+            },
+            {
+                image: "https://gateway.pinata.cloud/ipfs/YOUR_IMAGE_CID/1.png",
+                name: "Bob",
+                program: "Mathematics",
+                grade: "B"
+            },
+            // ... Add all your students here
+        ];
+
+        const galleryDiv = document.getElementById('gallery');
+
+        function displayCertificates(data) {
+            galleryDiv.innerHTML = "";
+            data.forEach(cert => {
+                const card = `
+                    <div class="card">
+                        <img src="${cert.image}" alt="Certificate">
+                        <h3>${cert.name}</h3>
+                        <p><strong>Program:</strong> ${cert.program}</p>
+                        <p><strong>Grade:</strong> ${cert.grade}</p>
+                    </div>
+                `;
+                galleryDiv.innerHTML += card;
+            });
+        }
+
+        function filterGallery() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            const filtered = certificates.filter(cert =>
+                cert.name.toLowerCase().includes(query) ||
+                cert.program.toLowerCase().includes(query)
+            );
+            displayCertificates(filtered);
+        }
+
+        // Initial Load
+        displayCertificates(certificates);
+    </script>
+</body>
+</html>
